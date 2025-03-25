@@ -1,0 +1,60 @@
+# ----------------------------------------------------------------------
+# Configuration SSH sécurisée
+# ----------------------------------------------------------------------
+# à mettre dans /etc/ssh/sshd_config
+
+# ✅ Port par défaut (22) — tu peux le modifier pour éviter les scans
+Port 22
+
+# ✅ N'écoute que sur IPv4 (désactive IPv6 si non utilisé)
+AddressFamily inet
+
+# ✅ Interdiction totale de connexion directe en root
+PermitRootLogin no
+
+# ✅ On désactive l'authentification par mot de passe
+# -> Seule la clé SSH est autorisée
+PasswordAuthentication no
+
+# ✅ On désactive les authentifications "challenge" obsolètes
+ChallengeResponseAuthentication no
+
+# ✅ On garde PAM actif pour compatibilité fail2ban/logs
+UsePAM yes
+
+# ✅ Authentification par clé publique activée
+PubkeyAuthentication yes
+
+# ✅ On peut restreindre les utilisateurs autorisés
+AllowUsers <user>
+
+# ✅ Réduction de la surface d’attaque brute-force
+MaxAuthTries 3                  # max 3 essais
+LoginGraceTime 30s             # 30 secondes max pour entrer une clé
+
+# ✅ Déconnexion auto des connexions inactives
+ClientAliveInterval 300        # ping toutes les 5 minutes
+ClientAliveCountMax 2          # déconnecte après 2 échecs (10 min total max)
+
+# ✅ Limitation des accès à distance inutiles
+X11Forwarding no
+AllowTcpForwarding no
+PermitTunnel no
+GatewayPorts no
+
+# ✅ Options de logging plus verbeuses (utile pour détection brute force, etc.)
+LogLevel VERBOSE
+SyslogFacility AUTH
+
+# ✅ Interdit les variables d'environnement risquées
+PermitUserEnvironment no
+
+# ✅ Masque la version du serveur SSH
+VersionAddendum none
+
+# ✅ Message de bienvenue désactivé
+PrintMotd no
+PrintLastLog yes
+
+# ✅ Active le sous-système SFTP standard
+Subsystem	sftp	/usr/lib/openssh/sftp-server
